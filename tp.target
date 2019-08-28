@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="fm-tp">
+	<locations>
+		<location path="${eclipse_home}" type="Profile"/>
+		<location path="/Users/wes/git-os/fluentmark/target/repository/plugins" type="Directory"/>
+	</locations>
+	<environment>
+		<arch>x86_64</arch>
+		<os>macosx</os>
+		<ws>cocoa</ws>
+		<nl>en_US</nl>
+	</environment>
+	<launcherArgs>
+		<vmArgs>-Dosgi.requiredJavaVersion=1.8 -Dosgi.instance.area.default=@user.home/eclipse-workspace -XX:+UseG1GC -XX:+UseStringDeduplication --add-modules=ALL-SYSTEM -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -Dosgi.requiredJavaVersion=1.8 -Dosgi.dataAreaRequiresExplicitInit=true -Xms256m -Xmx1024m --add-modules=ALL-SYSTEM -Xdock:icon=../Resources/Eclipse.icns -XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts -Declipse.p2.max.threads=10 -Doomph.update.url=http://download.eclipse.org/oomph/updates/milestone/latest -Doomph.redirection.index.redirection=index:/-&gt;http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/</vmArgs>
+	</launcherArgs>
+</target>
