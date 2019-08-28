@@ -37,7 +37,6 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.ITextViewerExtension6;
-import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.source.Annotation;
@@ -82,7 +81,6 @@ import net.certiv.fluentmark.FluentUI;
 import net.certiv.fluentmark.convert.Converter;
 import net.certiv.fluentmark.convert.HtmlGen;
 import net.certiv.fluentmark.convert.Kind;
-import net.certiv.fluentmark.dot.Record;
 import net.certiv.fluentmark.editor.color.IColorManager;
 import net.certiv.fluentmark.editor.folding.FoldingStructureProvider;
 import net.certiv.fluentmark.editor.folding.IFoldingStructureProvider;
@@ -94,7 +92,6 @@ import net.certiv.fluentmark.outline.FluentOutlinePage;
 import net.certiv.fluentmark.outline.operations.AbstractDocumentCommand;
 import net.certiv.fluentmark.outline.operations.CommandManager;
 import net.certiv.fluentmark.preferences.Prefs;
-import net.certiv.fluentmark.util.LRUCache;
 import net.certiv.fluentmark.util.Strings;
 
 /**
@@ -126,8 +123,6 @@ public class FluentEditor extends TextEditor
 	private EventListenerList docListenerList;
 	private IPropertyChangeListener prefChangeListener;
 	// private SemanticHighlightingManager semanticManager;
-
-	private final LRUCache<IRegion, Record> parseRecords = new LRUCache<>(25);
 
 	private boolean pageDirty = true;
 
@@ -305,7 +300,6 @@ public class FluentEditor extends TextEditor
 	public void dispose() {
 		removePreferenceStoreListener();
 		uninstallSemanticHighlighting();
-		parseRecords.clear();
 		colorManager.dispose();
 		colorManager = null;
 		super.dispose();
@@ -794,14 +788,6 @@ public class FluentEditor extends TextEditor
 	public void installOccurrencesFinder(boolean b) {}
 
 	public void uninstallOccurrencesFinder() {}
-
-	public Record getParseRecord(ITypedRegion region) {
-		return parseRecords.get(region);
-	}
-
-	public void setParseRecord(Record record) {
-		parseRecords.put(record.region, record);
-	}
 
 	@Override
 	public void reconciled() {

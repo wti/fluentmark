@@ -11,20 +11,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITypedRegion;
-import org.markdownj.MarkdownProcessor;
-import org.pegdown.PegDownProcessor;
-
-import com.github.rjeschke.txtmark.BlockEmitter;
-import com.github.rjeschke.txtmark.Configuration;
-import com.github.rjeschke.txtmark.Configuration.Builder;
-import com.github.rjeschke.txtmark.Processor;
 
 import net.certiv.fluentmark.FluentUI;
 import net.certiv.fluentmark.editor.Partitions;
@@ -36,7 +26,6 @@ public class Converter {
 
 	private static final Pattern DOTBEG = Pattern.compile("(~~~+|```+)\\s*dot\\s*", Pattern.DOTALL);
 	private static final Pattern DOTEND = Pattern.compile("(~~~+|```+)\\s*", Pattern.DOTALL);
-	private static final BlockEmitter emitter = new DotCodeBlockEmitter();
 	private IPreferenceStore store;
 
 	public Converter() {
@@ -62,18 +51,6 @@ public class Converter {
 			case Prefs.KEY_BLACKFRIDAY:
 				text = getText(doc, regions, false);
 				return useBlackFriday(basepath, text);
-			case Prefs.KEY_MARDOWNJ:
-				text = getText(doc, regions, false);
-				return useMarkDownJ(basepath, text);
-			case Prefs.KEY_PEGDOWN:
-				text = getText(doc, regions, false);
-				return usePegDown(basepath, text);
-			case Prefs.KEY_COMMONMARK:
-				text = getText(doc, regions, false);
-				return useCommonMark(basepath, text);
-			case Prefs.KEY_TXTMARK:
-				text = getText(doc, regions, false);
-				return useTxtMark(basepath, text);
 			case Prefs.EDITOR_EXTERNAL_COMMAND:
 				text = getText(doc, regions, false);
 				return useExternal(basepath, text);
@@ -118,40 +95,6 @@ public class Converter {
 		return Cmd.process(args.toArray(new String[args.size()]), basepath, text);
 	}
 
-	// Use MarkdownJ
-	private String useMarkDownJ(String basepath, String text) {
-		MarkdownProcessor markdown = new MarkdownProcessor();
-		return markdown.markdown(text);
-	}
-
-	// Use PegDown
-	private String usePegDown(String basepath, String text) {
-		PegDownProcessor pegdown = new PegDownProcessor();
-		return pegdown.markdownToHtml(text);
-	}
-
-	// Use CommonMark
-	private String useCommonMark(String basepath, String text) {
-		Parser parser = Parser.builder().build();
-		Node document = parser.parse(text);
-		HtmlRenderer renderer = HtmlRenderer.builder().build();
-		return renderer.render(document);
-	}
-
-	// Use TxtMark
-	private String useTxtMark(String basepath, String text) {
-		boolean safeMode = store.getBoolean(Prefs.EDITOR_TXTMARK_SAFEMODE);
-		boolean extended = store.getBoolean(Prefs.EDITOR_TXTMARK_EXTENDED);
-		boolean dotMode = store.getBoolean(Prefs.EDITOR_DOTMODE_ENABLED);
-
-		Builder builder = Configuration.builder();
-		if (safeMode) builder.enableSafeMode();
-		if (extended || dotMode) builder.forceExtentedProfile();
-		if (dotMode) builder.setCodeBlockEmitter(emitter);
-		Configuration config = builder.build();
-		return Processor.process(text, config);
-	}
-
 	// Use external command
 	private String useExternal(String basepath, String text) {
 		String cmd = store.getString(PrefPageEditor.EDITOR_EXTERNAL_COMMAND);
@@ -183,11 +126,6 @@ public class Converter {
 					if (store.getBoolean(Prefs.EDITOR_DOTMODE_ENABLED)) {
 						text = filter(text, DOTBEG, DOTEND);
 						text = DotGen.runDot(text);
-					}
-					break;
-				case Partitions.UMLBLOCK:
-					if (store.getBoolean(Prefs.EDITOR_UMLMODE_ENABLED)) {
-						text = UmlGen.uml2svg(text);
 					}
 					break;
 				default:

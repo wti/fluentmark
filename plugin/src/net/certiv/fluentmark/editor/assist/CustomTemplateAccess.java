@@ -17,6 +17,7 @@ import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import net.certiv.fluentmark.Log;
 import net.certiv.fluentmark.FluentUI;
 
+@SuppressWarnings("deprecation")
 public class CustomTemplateAccess {
 
 	// preference store key used to store the template.xml content as a string

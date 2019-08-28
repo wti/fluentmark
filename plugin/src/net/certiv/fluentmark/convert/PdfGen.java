@@ -7,10 +7,8 @@
 package net.certiv.fluentmark.convert;
 
 import java.awt.Desktop;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,12 +34,8 @@ import net.certiv.fluentmark.model.SourceRange;
 import net.certiv.fluentmark.model.Type;
 import net.certiv.fluentmark.preferences.Prefs;
 import net.certiv.fluentmark.util.Cmd;
-import net.certiv.fluentmark.util.FileUtils;
 import net.certiv.fluentmark.util.Strings;
 import net.certiv.fluentmark.util.Temps;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
 
 public class PdfGen {
 
@@ -149,19 +143,6 @@ public class PdfGen {
 					if (ok) edit.addChild(splice(doc, range, tmpfile));
 					break;
 
-				case UmlGen.UML:
-					tmpfile = createTmpFile(dir, "eps");
-					if (tmpfile == null) continue;
-
-					text = extractText(doc, range);
-					if (text == null) continue;
-
-					// convert to pdf
-					ok = uml2pdf(tmpfile, text);
-
-					// splice in latex blocks to include the pdf
-					if (ok) edit.addChild(splice(doc, range, tmpfile));
-					break;
 			}
 		}
 
@@ -236,19 +217,6 @@ public class PdfGen {
 
 		Cmd.process(args, null, data);
 		return true;
-	}
-
-	private static boolean uml2pdf(File file, String text) {
-		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-			SourceStringReader reader = new SourceStringReader(text);
-			reader.generateImage(os, new FileFormatOption(FileFormat.EPS));
-			String result = new String(os.toByteArray(), Charset.forName("UTF-8"));
-			FileUtils.write(file, result);
-			return true;
-		} catch (IOException e) {
-			Log.error("Uml exception on" + Strings.EOL + text, e);
-		}
-		return false;
 	}
 
 	private static TextEdit splice(IDocument doc, ISourceRange range, File tmpfile) {

@@ -35,6 +35,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import net.certiv.fluentmark.util.Strings;
 
+@SuppressWarnings("deprecation")
 public class TemplateCompletionProcessor extends org.eclipse.jface.text.templates.TemplateCompletionProcessor {
 
 	private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{([^\\}]+)\\}"); //$NON-NLS-1$
@@ -71,7 +72,6 @@ public class TemplateCompletionProcessor extends org.eclipse.jface.text.template
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected Template[] getTemplates(String contextTypeId) {
 		if (contextType.getId().equals(contextTypeId)) {

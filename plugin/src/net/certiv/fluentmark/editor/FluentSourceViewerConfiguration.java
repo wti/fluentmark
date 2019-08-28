@@ -39,7 +39,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import net.certiv.fluentmark.FluentUI;
 import net.certiv.fluentmark.ProgressMonitorAndCanceler;
-import net.certiv.fluentmark.editor.assist.DotCompletionProcessor;
 import net.certiv.fluentmark.editor.assist.MultiContentAssistProcessor;
 import net.certiv.fluentmark.editor.assist.TemplateCompletionProcessor;
 import net.certiv.fluentmark.editor.color.IColorManager;
@@ -82,7 +81,6 @@ public class FluentSourceViewerConfiguration extends TextSourceViewerConfigurati
 	private IShowInTarget showInTarget;
 
 	private IContentAssistProcessor templatesProcessor;
-	private DotCompletionProcessor dotProcessor;
 	private boolean enableHippie = true;
 	private HippieProposalProcessor hippieProcessor;
 	private ScannerMarkup markup;
@@ -229,9 +227,6 @@ public class FluentSourceViewerConfiguration extends TextSourceViewerConfigurati
 		}
 		if (enableHippie && hippieProcessor == null) {
 			hippieProcessor = new HippieProposalProcessor();
-		}
-		if (dotProcessor == null) {
-			dotProcessor = new DotCompletionProcessor(editor);
 		}
 
 		MultiContentAssistProcessor processor = new MultiContentAssistProcessor();

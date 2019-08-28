@@ -72,9 +72,6 @@ public class CompositeReconcilingStrategy extends MultiReconcilingStrategy {
 				strategies.add(spellStrategy);
 			}
 		}
-		if (store.getBoolean(Prefs.EDITOR_DOTMODE_ENABLED)) {
-			strategies.add(new DotReconcilingStrategy(editor, viewer));
-		}
 		if (strategies.isEmpty()) {
 			strategies.add(new NullReconcilingStrategy());
 		}
