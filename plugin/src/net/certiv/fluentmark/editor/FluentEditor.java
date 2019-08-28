@@ -38,6 +38,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.ITextViewerExtension6;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
@@ -50,6 +51,7 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -88,10 +90,12 @@ import net.certiv.fluentmark.editor.text.SmartBackspaceManager;
 import net.certiv.fluentmark.model.ISourceRange;
 import net.certiv.fluentmark.model.PagePart;
 import net.certiv.fluentmark.model.PageRoot;
+import net.certiv.fluentmark.model.SourceRange;
 import net.certiv.fluentmark.outline.FluentOutlinePage;
 import net.certiv.fluentmark.outline.operations.AbstractDocumentCommand;
 import net.certiv.fluentmark.outline.operations.CommandManager;
 import net.certiv.fluentmark.preferences.Prefs;
+import net.certiv.fluentmark.util.Debug;
 import net.certiv.fluentmark.util.Strings;
 
 /**
@@ -558,13 +562,28 @@ public class FluentEditor extends TextEditor
 	public void selectionChanged() {
 		if (disableSelResponse) return;
 
-		if (getSelectionProvider() == null) return;
+		ISelectionProvider provider = getSelectionProvider();
+		if (null == provider)  {
+			return;
+		}
+		// Use more-specific caret range when updating editor, if available.
+		ISelection selection = provider.getSelection();
+		Debug.logInfo("FluentEditor.selectionChanged: ", selection);
+		ISourceRange editorLoc = null;
+		if (selection instanceof TextSelection) {
+			TextSelection ts = (TextSelection) selection;
+			editorLoc = new SourceRange(ts.getOffset(), ts.getLength());
+		}
 		ISourceReference element = computeHighlightRange();
 		if (element != null) {
 			disableSelResponse = true;
 			try {
 				if (isOutlinePageValid()) outlinePage.select(element);
-				setSelection(element.getSourceRange(), false);
+				if (null != editorLoc) {
+					setSelection(editorLoc, false);
+				} else {
+					setSelection(element.getSourceRange(), false);
+				}
 			} finally {
 				disableSelResponse = false;
 			}
@@ -586,6 +605,7 @@ public class FluentEditor extends TextEditor
 			int start = range.getOffset();
 			int length = range.getLength();
 			setHighlightRange(start, length, moveCursor);
+			Debug.logInfo("Editor.setSelection[start=", start, ", length=", length+"]");
 
 			if (moveCursor) {
 				if (start > -1 && getSourceViewer() != null) {
@@ -601,7 +621,14 @@ public class FluentEditor extends TextEditor
 	}
 
 	public void revealPart(PagePart part) {
-		reveal(part.getSourceRange().getOffset(), part.getSourceRange().getLength());
+		// editor cursor move -> outline selection change 
+		// -> post-selection listener -> editor reveal
+		ISourceRange range = null == part ? null : part.getSourceRange();
+		if (disableSelResponse || null == range) {
+			return;
+		}
+		Debug.logInfo("Editor.revealPart[range=", range, "]");
+		reveal(range.getOffset(), range.getLength());
 		// TODO: scroll browser
 	}
 
