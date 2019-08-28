@@ -44,7 +44,7 @@
 		<repository>
 			<id>tools</id>
 			<layout>p2</layout>
-			<url>file:./target/repository/</url>
+			<url>file:./repository/</url>
 		</repository>
 	</repositories>
 

@@ -58,7 +58,7 @@
 					<!-- starting from here all configuration parameters are optional -->
 					<!-- they are only shown here with default values for documentation purpose -->
 					<!-- The destination directory to mirror to. -->
-					<destination>${project.build.directory}/repository</destination>
+					<destination>${project.build.directory}/../repository</destination>
 					<!-- Whether only strict dependencies should be followed. -->
 					<!-- "strict" means perfect version match -->
 					<followStrictOnly>false</followStrictOnly>

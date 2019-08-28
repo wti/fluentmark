@@ -3,7 +3,7 @@
 <target name="fm-tp">
 	<locations>
 		<location path="${eclipse_home}" type="Profile"/>
-		<location path="/Users/wes/git-os/fluentmark/target/repository/plugins" type="Directory"/>
+		<location path="/Users/wes/git-os/fluentmark/repository/plugins" type="Directory"/>
 	</locations>
 	<environment>
 		<arch>x86_64</arch>
