@@ -81,6 +81,7 @@ import net.certiv.fluentmark.model.PageRoot;
 import net.certiv.fluentmark.model.Type;
 import net.certiv.fluentmark.outline.dnd.DndConfigurationStrategy;
 import net.certiv.fluentmark.preferences.Prefs;
+import net.certiv.fluentmark.util.Debug;
 
 /**
  * The content outline page of the Fluent editor. Publishes its context menu under
@@ -265,6 +266,7 @@ public class FluentOutlinePage extends ContentOutlinePage implements IShowInSour
 		 * @param delta the Dsl element delta used to reconcile the Dsl outline
 		 */
 		public void reconcile(PagePart delta) {
+			Debug.logInfo("FluentOutline.reconcile: ", delta);
 			refresh(true);
 		}
 	}
@@ -558,11 +560,13 @@ public class FluentOutlinePage extends ContentOutlinePage implements IShowInSour
 
 	private void doPropertyChange(PropertyChangeEvent event) {
 		if (viewer != null) {
+			Debug.logInfo("Outline property change: ", event);
 			viewer.refresh(false);
 		}
 	}
 
 	public void select(ISourceReference reference) {
+		Debug.logInfo("FluentOutline.select: ", reference);
 		if (viewer != null) {
 			ISelection sel = viewer.getSelection();
 			if (sel instanceof IStructuredSelection) {

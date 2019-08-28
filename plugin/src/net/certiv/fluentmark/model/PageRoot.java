@@ -29,6 +29,7 @@ import net.certiv.fluentmark.convert.DotGen;
 import net.certiv.fluentmark.editor.FluentEditor;
 import net.certiv.fluentmark.editor.IDocumentChangedListener;
 import net.certiv.fluentmark.model.Lines.Line;
+import net.certiv.fluentmark.util.Debug;
 import net.certiv.fluentmark.util.FloorKeyMap;
 
 public class PageRoot extends Parent implements IResourceChangeListener, IDocumentChangedListener {
@@ -100,6 +101,7 @@ public class PageRoot extends Parent implements IResourceChangeListener, IDocume
 
 				@Override
 				public void run() throws Exception {
+					Debug.eventPageRootElementChanged(listener, event);
 					listener.elementChanged(event);
 				}
 
