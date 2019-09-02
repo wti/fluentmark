@@ -10,6 +10,10 @@ import net.certiv.fluentmark.model.ElementChangedEvent;
 import net.certiv.fluentmark.model.IElementChangedListener;
 import net.certiv.fluentmark.model.PagePart;
 
+/**
+ * Debug-time log messages, mainly for isolating UI issues.
+ * If kept, this should use Eclipse tracing configuration.
+ */
 public class Debug {
 	public static final boolean ON = Boolean.getBoolean("Debug.ON");
 
@@ -31,7 +35,7 @@ public class Debug {
 		}
 	}
 
-	public static String msg(Object... args) {
+	private static String msg(Object... args) {
 		if (!ON || null == args || 0 == args.length) {
 			return "";
 		}
@@ -41,12 +45,14 @@ public class Debug {
 		StringBuilder sb = new StringBuilder(25 * args.length);
 		for (int i = 0; i < args.length; i++) {
 			sb.append(args[i]);
-			sb.append(' ');
 		}
 		return sb.toString();
 	}
 
 	public static void eventPageRootElementChanged(IElementChangedListener listener, ElementChangedEvent event) {
+		if (!ON) {
+			return;
+		}
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd-HHmm.ss");
 			Date date = new Date(System.currentTimeMillis());
@@ -63,7 +69,7 @@ public class Debug {
 
 	}
 
-	public static void brEvalInsert(Object editor, Object lineDelim) {
+	private static void brEvalInsert(Object editor, Object lineDelim) {
 		if (null == editor) {
 			Debug.logWarn("EIP: null editor");
 		} else if (null == lineDelim) {
@@ -71,7 +77,7 @@ public class Debug {
 		}
 	}
 
-	public static String str(ElementChangedEvent e) {
+	private static String str(ElementChangedEvent e) {
 		// if (source instanceof PageRoot) {
 		String typeName = "[" + e.getType() + "]";
 		switch (e.getType()) {
@@ -92,20 +98,20 @@ public class Debug {
 		return me + "[type=" + typeName + ", part=" + partStr + ", source=" + src + "]";
 	}
 
-	public static String str(PagePart part) {
+	private static String str(PagePart part) {
 		return "Part[kind=" + part.getKind() + ", outlineContent=" + part.toString() //
 				+ ", range=" + part.getSourceRange() //
 				+ "]";
 	}
 
-	public static String toString(Object o) {
+	private static String toString(Object o) {
 		if (null == o) {
 			return "null";
 		}
 		return shortClassname(o.getClass()) + "@" + Integer.toHexString(o.hashCode());
 	}
 
-	public static String shortClassname(Class<?> c) {
+	private static String shortClassname(Class<?> c) {
 		if (null == c) {
 			return "nullClass";
 		}
