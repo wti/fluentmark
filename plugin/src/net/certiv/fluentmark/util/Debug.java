@@ -10,10 +10,6 @@ import net.certiv.fluentmark.model.ElementChangedEvent;
 import net.certiv.fluentmark.model.IElementChangedListener;
 import net.certiv.fluentmark.model.PagePart;
 
-/**
- * Debug-time log messages, mainly for isolating UI issues.
- * If kept, this should use Eclipse tracing configuration.
- */
 public class Debug {
 	public static final boolean ON = Boolean.getBoolean("Debug.ON");
 
@@ -69,7 +65,7 @@ public class Debug {
 
 	}
 
-	private static void brEvalInsert(Object editor, Object lineDelim) {
+	static void brEvalInsert(Object editor, Object lineDelim) {
 		if (null == editor) {
 			Debug.logWarn("EIP: null editor");
 		} else if (null == lineDelim) {
@@ -77,7 +73,7 @@ public class Debug {
 		}
 	}
 
-	private static String str(ElementChangedEvent e) {
+	static String str(ElementChangedEvent e) {
 		// if (source instanceof PageRoot) {
 		String typeName = "[" + e.getType() + "]";
 		switch (e.getType()) {
@@ -98,20 +94,20 @@ public class Debug {
 		return me + "[type=" + typeName + ", part=" + partStr + ", source=" + src + "]";
 	}
 
-	private static String str(PagePart part) {
+	static String str(PagePart part) {
 		return "Part[kind=" + part.getKind() + ", outlineContent=" + part.toString() //
 				+ ", range=" + part.getSourceRange() //
 				+ "]";
 	}
 
-	private static String toString(Object o) {
+	static String toString(Object o) {
 		if (null == o) {
 			return "null";
 		}
 		return shortClassname(o.getClass()) + "@" + Integer.toHexString(o.hashCode());
 	}
 
-	private static String shortClassname(Class<?> c) {
+	static String shortClassname(Class<?> c) {
 		if (null == c) {
 			return "nullClass";
 		}
