@@ -48,6 +48,7 @@ public class PrefPageEditor extends BaseFieldEditorPreferencePage implements Pre
 		addField(new BooleanFieldEditor(EDITOR_PDF_OPEN, "Open PDF file after creation", baseComp));
 		addField(new IntegerFieldEditor(EDITOR_TAB_WIDTH, "Tab size: ", baseComp, 6));
 
+		addField(new BooleanFieldEditor(EDITOR_MATH_INLINE, "Inline math", baseComp));
 		addField(new BooleanFieldEditor(EDITOR_FORMATTING_ENABLED, "Formatting enabled", baseComp));
 		addField(new IntegerFieldEditor(EDITOR_FORMATTING_COLUMN, "Formatted line width: ", baseComp, 6));
 
