@@ -7,6 +7,7 @@
  ******************************************************************************/
 package net.certiv.fluentmark.model;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import net.certiv.fluentmark.model.Lines.Line;
@@ -35,12 +36,13 @@ public class Headers {
 		}
 	}
 
-	private Stack<Header> headers = new Stack<>();
-	private PageRoot root;
+	private final Stack<Header> headers = new Stack<>();
+	private final Header rootHeader;
 
 	public Headers(PageRoot root) {
-		this.root = root;
-		headers.push(new Header(root)); // header 0 is the PageRoot
+		// header 0 is the PageRoot
+		this.rootHeader = new Header(root);
+		headers.push(rootHeader); 
 	}
 
 	public void putHeader(IParent current, Line line) {
@@ -53,10 +55,12 @@ public class Headers {
 	}
 
 	public IParent getEnclosingParent(int level) {
+		// TODO why not headers.elementAt(level) if level < headers.size()?
+		// this is not thread-safe anyway...
 		if (level < 1) level = 1;
 		if (level > 6) level = 6;
 		while (headers.peek().level >= level) {
-			headers.pop();
+			headers.pop(); // TODO really? "get" that removes headers?
 		}
 		return headers.peek().element;
 	}
@@ -70,11 +74,12 @@ public class Headers {
 	}
 
 	public void clear() {
-		headers.clear();
-		headers.push(new Header(root));
+		// slower, but never get empty header
+		headers.retainAll(Arrays.asList(rootHeader));
 	}
 
 	public void dispose() {
 		headers.clear();
+		// TODO ensure not used after disposed?
 	}
 }
