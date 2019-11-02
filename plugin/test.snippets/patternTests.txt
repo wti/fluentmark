@@ -1,0 +1,59 @@
+# comma-delimited input then "pass" (or not) then p-name (and other fields ignored)
+# p-name must be known
+# lines without three comma-delimited fields or with empty fields are ignored
+
+# some pass
+---go, pass, prefix3dash
+===go, pass, prefix3equals
+#ok, pass, prefix1hash
+$$math, pass, prefix2dollar
+$foo$, pass, mathinline
+ some $foo$ math, pass, mathinline
+<!--- ok --->, pass, prefixXmlCommentStart
+--->, pass, prefixXmlCommentEnd
+___, pass, prefix3Underbar
+***, pass, prefix3Star
+---, pass, prefix3Dash
+|---|-|, pass, anyTable
+  |---:|:---:|, pass, anyTable
+- s, pass, prefixUList
+1. s, pass, prefixOList
+    - s, pass, prefixUList
+    1. s, pass, prefixOList
+> ok, pass, anyQuote
+  ok > now, pass, anyQuote
+: a, pass, anyDef
+[1]: a, pass, anyRef
+  : a, pass, anyDef
+  [1]: a, pass, anyRef
+<a >, pass, anyHtmlBlock
+ and <b>, pass, anyHtmlBlock
+```, pass, prefixCodeBacktick
+~~~, pass, prefixCodeTilde
+    a, pass, prefixCodeBlock
+@start, pass, prefixCodeStart
+@end, pass, prefixCodeEnd
+
+# some fail
+--go, fail, prefix3dash
+==go, fail, prefix3equals
+ok, fail, prefix1hash
+$math, fail, prefix2dollar
+foo$, fail, mathinline
+!--- ok --->, fail, prefixXmlCommentStart
+-->, fail, prefixXmlCommentEnd
+__, fail, prefix3Underbar
+**, fail, prefix3Star
+--, fail, prefix3Dash
+s|, fail, anyTable
+ s, fail, prefixUList
+. s, fail, prefixOList
+ ok, fail, anyQuote
+a, fail, anyDef
+[]: a, fail, anyRef
+< >, fail, anyHtmlBlock
+``, fail, prefixCodeBacktick
+~~, fail, prefixCodeTilde
+   a, fail, prefixCodeBlock
+@star, fail, prefixCodeStart
+@en, fail, prefixCodeEnd
