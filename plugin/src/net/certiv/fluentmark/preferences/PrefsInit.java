@@ -54,6 +54,7 @@ public class PrefsInit extends AbstractPreferenceInitializer implements Prefs {
 		store.setDefault(EDITOR_FORMATTING_ENABLED, true);
 		store.setDefault(EDITOR_FORMATTING_COLUMN, 80);
 		store.setDefault(EDITOR_WORD_WRAP, false);
+		store.setDefault(EDITOR_MATH_INLINE, true);
 		store.setDefault(EDITOR_SHOW_SEGMENTS, false);
 
 		store.setDefault(EDITOR_OUTLINE_SHOW_BLANKLINES, false);

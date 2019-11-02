@@ -39,6 +39,7 @@ public interface Prefs extends PrefsSpelling {
 
 	String EDITOR_SHOW_SEGMENTS = MD_ID + ".ShowSegments";
 	String EDITOR_WORD_WRAP = MD_ID + ".WordWrap";
+	String EDITOR_MATH_INLINE = MD_ID + ".MathInline";
 	String EDITOR_TASK_TAGS = MD_ID + ".TaskTagsOn";
 	String EDITOR_TASK_TAGS_DEFINED = MD_ID + ".TaskTags";
 	String EDITOR_SECTION_NUMBERS = MD_ID + ".SectionNumbers";
