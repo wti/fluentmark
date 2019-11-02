@@ -46,7 +46,7 @@ public class PageRoot extends Parent implements IResourceChangeListener, IDocume
 	protected List<IElementChangedListener> elementChangedListeners = Collections
 			.synchronizedList(new ArrayList<IElementChangedListener>());
 
-	private FluentEditor editor;
+	private final FluentEditor editor;
 	private List<PagePart> parts;	// all page parts
 	private Headers headers;		// all header page parts
 	private Lines lines;			// all lines
@@ -239,8 +239,11 @@ public class PageRoot extends Parent implements IResourceChangeListener, IDocume
 
 	private void parse() {
 		parts = new ArrayList<>();
-		lines = new Lines(getContent(), getLineDelim());
-		lineMap = lines.getOffsetMap();
+		String lineDelim = getLineDelim();
+		String content = getContent();
+		String[] strLines = content.split(lineDelim, -1); // do not skip blank lines
+		this.lines = new Lines(strLines, lineDelim, editor.isMathInline());
+		this.lineMap = this.lines.getOffsetMap();
 		int end;
 		int offset;
 		int len;
@@ -248,8 +251,8 @@ public class PageRoot extends Parent implements IResourceChangeListener, IDocume
 
 		if (getContent().trim().isEmpty()) return;
 
-		for (int idx = 0; idx < lines.length(); idx++) {
-			Type kind = lines.identifyKind(idx);
+		for (int idx = 0; idx < this.lines.length(); idx++) {
+			Type kind = this.lines.identifyKind(idx);
 			switch (kind) {
 
 				case HEADER:
@@ -331,7 +334,7 @@ public class PageRoot extends Parent implements IResourceChangeListener, IDocume
 
 				case HTML_BLOCK:
 					end = lines.nextMatching(idx, Type.BLANK);
-					end = lines.identifyKind(end) == Type.BLANK ? end - 1 : end;
+					end = lines.isType(Type.BLANK, end) ? end - 1 : end;
 					offset = lines.getOffset(idx);
 					len = lines.getOffset(end) + lines.getTextLength(end) - offset;
 					current = headers.getCurrentParent();
