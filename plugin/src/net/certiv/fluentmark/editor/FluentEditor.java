@@ -299,6 +299,11 @@ public class FluentEditor extends TextEditor
 	private boolean isWordWrap() {
 		return getPreferenceStore().getBoolean(Prefs.EDITOR_WORD_WRAP);
 	}
+	
+	public boolean isMathInline() {
+		IPreferenceStore ps = getPreferenceStore();
+		return null != ps && ps.getBoolean(Prefs.EDITOR_MATH_INLINE);
+	}
 
 	@Override
 	public void dispose() {
