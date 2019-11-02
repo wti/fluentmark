@@ -110,9 +110,11 @@ public class FluentOutlinePage extends ContentOutlinePage implements IShowInSour
 			if (store.getBoolean(Prefs.EDITOR_OUTLINE_SHOW_BLANKLINES)) return children;
 
 			List<IElement> filtered = new ArrayList<>();
-			for (IElement child : children) {
-				if (child.getKind() != Type.BLANK) {
-					filtered.add(child);
+			if (null != children) {
+				for (IElement child : children) {
+					if (null != child && child.getKind() != Type.BLANK) {
+						filtered.add(child);
+					}
 				}
 			}
 			return filtered.toArray(new IElement[filtered.size()]);
