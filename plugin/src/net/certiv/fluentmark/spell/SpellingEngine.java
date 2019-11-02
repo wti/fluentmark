@@ -34,14 +34,31 @@ public class SpellingEngine extends TextSpellingEngine {
 	@Override
 	protected void check(IDocument doc, IRegion[] regions, ISpellChecker checker, ISpellingProblemCollector collector,
 			IProgressMonitor monitor) {
-
+		check0(doc, regions, checker, collector);
+		super.check(doc, regions, checker, collector, monitor);
+	}
+	protected void check0(IDocument doc, IRegion[] regions, ISpellChecker checker, ISpellingProblemCollector collector) {
+		final int len = null == regions ? 0 : regions.length;
+		if (0 == len || null == doc) {
+			return;
+		}
 		Filter filter = new Filter();
 		try {
 			regions = filter.exec(doc, regions);
 		} catch (BadLocationException | BadPartitioningException e) {
-			Log.error("Failed to filter doc partitions: " + e.getMessage());
+			StringBuilder sb = new StringBuilder(128);
+			sb.append("Failed to filter doc partitions. ");
+			sb.append( len + " regions: {");
+			for (int i = 0; i < len; i++) {
+				sb.append("[");
+				sb.append(Integer.valueOf(regions[i].getOffset()));
+				sb.append("+");
+				sb.append(Integer.valueOf(regions[i].getLength()));
+				sb.append("]");
+			}
+			sb.append("}");
+			Log.error(sb.toString(), e);
 		}
-
-		super.check(doc, regions, checker, collector, monitor);
+		
 	}
 }
