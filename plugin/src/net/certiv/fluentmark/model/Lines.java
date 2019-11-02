@@ -147,8 +147,8 @@ public class Lines {
 
 		boolean priorblank = curr.isBlankPrior();
 		boolean curblank = curr.isBlank();
-		boolean nxtblank = next != null ? next.isBlank() : true;
-		boolean nxtnxtblank = next != null ? next.isBlankNext() : true;
+		boolean nxtblank = next == null || next.isBlank();
+		boolean nxtnxtblank = next == null || next.isBlankNext();
 
 		if (curblank) return Type.BLANK;
 
