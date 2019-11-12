@@ -50,8 +50,8 @@ public class Headers {
 	}
 
 	public IParent getCurrentParent() {
-		Header top = headers.peek();
-		return top.element;
+		Header top = headers.isEmpty() ? null : headers.peek();
+		return null == top ? null : top.element;
 	}
 
 	public IParent getEnclosingParent(int level) {
@@ -59,6 +59,9 @@ public class Headers {
 		// this is not thread-safe anyway...
 		if (level < 1) level = 1;
 		if (level > 6) level = 6;
+		if (headers.isEmpty()) {
+			return null;
+		}
 		while (headers.peek().level >= level) {
 			headers.pop(); // TODO really? "get" that removes headers?
 		}
@@ -79,7 +82,6 @@ public class Headers {
 	}
 
 	public void dispose() {
-		headers.clear();
-		// TODO ensure not used after disposed?
+		headers.retainAll(Arrays.asList(rootHeader));
 	}
 }
