@@ -55,17 +55,31 @@ public class Headers {
 	}
 
 	public IParent getEnclosingParent(int level) {
-		// TODO why not headers.elementAt(level) if level < headers.size()?
-		// this is not thread-safe anyway...
 		if (level < 1) level = 1;
 		if (level > 6) level = 6;
 		if (headers.isEmpty()) {
 			return null;
 		}
+		IParent last = null;
 		while (headers.peek().level >= level) {
-			headers.pop(); // TODO really? "get" that removes headers?
+			// TODO really? "getParent" that removes headers?
+			Header header = headers.pop();
+			if (null != header && null != header.element) {
+				last = header.element;
+			}
 		}
-		return headers.peek().element;
+		Header result = headers.peek();
+		if (null != result && null != result.element) {
+			last = result.element;
+		}
+		return last;
+//		for (int i = headers.size() - 1; i >= 0; i--) {
+//			Header header = headers.get(i); // race
+//			if (header.level < level) {
+//				return header.element;
+//			}
+//		}
+//		return null;
 	}
 
 	public static int computeLevel(String text) {

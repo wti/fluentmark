@@ -56,7 +56,9 @@ public class PagePart extends Parent {
 	/** Returns the full length of this part including blank separator */
 	public int getLengthWithSep() {
 		int len = getSourceRange().getLength();
-		len += separator.getSourceRange().getLength();
+		if (null != separator) {
+			len += separator.getSourceRange().getLength();
+		}
 		return len;
 	}
 
