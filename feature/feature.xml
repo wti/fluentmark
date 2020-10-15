@@ -28,10 +28,9 @@ for more information.
    <url>
       <update label="Certiv Analytics" url="http://www.certiv.net/updates/"/>
    </url>
-
-   <includes
-         id="net.certiv.spellchecker.feature"
-         version="0.0.0"/>
+<!--
+   <includes id="net.certiv.spellchecker.feature" version="0.0.0"/>
+-->
 
    <includes
          id="net.certiv.tools.feature"
