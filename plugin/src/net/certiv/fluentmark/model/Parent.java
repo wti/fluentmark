@@ -23,7 +23,7 @@ public abstract class Parent extends Element implements IParent {
 	public Parent(IParent parent, Type kind, ISourceRange range) {
 		super(kind, range);
 		this.parent = parent;
-		this.lineDelim = parent.getLineDelim();
+		this.lineDelim = null == parent ? "\n" :parent.getLineDelim();
 	}
 
 	public Parent(String lineDelim) {
