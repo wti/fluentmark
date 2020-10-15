@@ -15,11 +15,17 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
+import org.eclipse.jface.text.hyperlink.IHyperlink;
+import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
+import org.eclipse.jface.text.hyperlink.URLHyperlink;
 import org.eclipse.jface.text.information.IInformationPresenter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
@@ -105,6 +111,61 @@ public class FluentSourceViewerConfiguration extends TextSourceViewerConfigurati
 		this.editor = editor;
 		this.partitioning = partitioning;
 		initializeScanners();
+	}
+
+	@Override
+	public IHyperlinkDetector[] getHyperlinkDetectors(
+			ISourceViewer sourceViewer) {
+		IHyperlinkDetector[] detectors = super.getHyperlinkDetectors(sourceViewer);
+		if (null == detectors) {
+			return null;
+		}
+		for (int i = 0; i < detectors.length; i++) {
+			if (null != detectors[i]) {
+				detectors[i] = new WrapHL(detectors[i]);
+			}
+		}
+		return detectors;
+	}
+
+	/**
+	 * Hack to trim trailing ')' from returned hyperlinks from markdown link.
+	 */
+	private class WrapHL implements IHyperlinkDetector {
+
+		public final IHyperlinkDetector wrap;
+
+		WrapHL(IHyperlinkDetector wrap) {
+			this.wrap = wrap;
+		}
+
+		@Override
+		public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region,
+				boolean canShowMultipleHyperlinks) {
+			IHyperlink[] result = wrap.detectHyperlinks(textViewer, region,
+					canShowMultipleHyperlinks);
+			return patch(result);
+		}
+
+		IHyperlink[] patch(IHyperlink[] source) {
+			if (null == source) {
+				return null;
+			}
+			for (int j = 0; j < source.length; j++) {
+				IHyperlink src = source[j];
+				if (src instanceof URLHyperlink) {
+					URLHyperlink uhl = (URLHyperlink) src;
+					String url = uhl.getURLString();
+					if (null != url && url.endsWith(")")) {
+						url = url.substring(0, url.length() - 1);
+						IRegion region = src.getHyperlinkRegion();
+						region = new Region(region.getOffset(), region.getLength() - 1);
+						source[j] = new URLHyperlink(region, url);
+					}
+				}
+			}
+			return source;
+		}
 	}
 
 	/**
