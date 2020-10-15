@@ -10,8 +10,10 @@ The target platform was not defined or complete, so I removed some functionality
 To build from the command-line:
 
 1. I'm using mvn 3.0+ and Java 1.8.
-2. Run `mvn -f mirror-pom.xml` to mirror the update site to `repository`
+2. Run `mvn -f mirror-pom.xml package` to mirror the update site to `repository`
 3. Then `mvn package` should complete successfully.
+
+TODO: problems with these instructions - some local repo fixup?
 
 To configure Eclipse IDE for development:
 1. I'm using 2019 with PDE support
