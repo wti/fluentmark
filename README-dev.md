@@ -27,3 +27,20 @@ and checked in the .classpath and .project file directly.
 
 This fork is in alpha state.
 
+## misc history
+### hyperlink detection, Oct 2020
+- bug is in URLHyperlinkDetector
+- FluentSimpleSourceViewerConfiguration.java
+- FluentSimpleSourceViewer.java
+- fluentmark build not working
+    - backed up to 1.8 JAVA_HOME
+    - require spellcheck 3.3.2
+    - plugin is in repo mirror, but not in feature/artifact metadata
+    - also no local installable units added - not resolving local p2 repo?
+    - better after changing manifest to permit 3.3.1 spellchecker
+- fluentmark compile not working: missing Shell?
+    - net/certiv/fluentmark/editor/text/rules/IndentedCodeRule.java:
+    - The type ..Shell is indirectly referenced from required .class files
+    - swt -> wrong environment parameters?
+    - working after reverting to photon repo
+
