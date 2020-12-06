@@ -28,6 +28,14 @@ and checked in the .classpath and .project file directly.
 This fork is in alpha state.
 
 ## misc history
+### Install issues
+- install using site/target/..zip, not by pointing at site directory
+- build fail 1: no Arrays class, when no JAVA-HOME or it points to java 11+
+	- workaround: point to legacy (non-module) java-8 as JAVA_HOME and with PATH
+- build working fine, but install fails looking for spellchecker and org.eclipse.epp...
+- reinstalled eclipse, removed ~/.eclipse, added certiv update site: http://www.certiv.net/updates
+	- note local mirror should manage certiv.  Unclear what happens if update site goes down.
+
 ### hyperlink detection, Oct 2020
 - bug is in URLHyperlinkDetector
 - FluentSimpleSourceViewerConfiguration.java
