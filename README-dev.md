@@ -52,3 +52,26 @@ This fork is in alpha state.
     - swt -> wrong environment parameters?
     - working after reverting to photon repo
 
+### build/install broken Dec 2020
+#### not installing into 2020-12 eclipse.  
+- prior process was sketchy
+- builds and installs without warning, but
+- editor plugin is not recognized as an editor
+
+#### Current build of my tree is messed up
+- 1.8 is required - ok
+- but not getting required PDE/platform plugins in target platform
+- having to deal with dependencies from fm -> certiv tools -> eclipse
+
+#### remote seems unusable
+- remote repo was updated this year (~18 commits, new DSL tooling/framework)
+- unclear how to pull and merge in git
+    - getting not diffs but complete files, likely EOL
+- when cloning the remote, get warnings about case-sensitive file collisions
+    - current FS is not case-sensitive, but clone has CS files
+- remote depends on locally-build repositories (pom.xml#repositories)
+    - my mirror-pom.xml might do one target platform, but
+    - not the 2 DSL framework 
+- so it appears upstream is n/a
+- not clear if it is helpful: new DSL framework, sketchy response - hacked?
+

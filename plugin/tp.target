@@ -4,6 +4,7 @@
 	<locations>
 		<location path="${eclipse_home}" type="Profile"/>
 		<location path="/Users/wes/git-os/fluentmark/repository/plugins" type="Directory"/>
+    	<location path="/Users/wes/eclipse/rcp-20-12/Eclipse.app/Contents/Eclipse" type="Profile"/>
 	</locations>
 	<environment>
 		<arch>x86_64</arch>
