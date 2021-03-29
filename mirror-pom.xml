@@ -24,8 +24,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<tycho.version>1.7.0</tycho.version>
-		<!-- <tycho-extras.version>1.2.0</tycho-extras.version> -->
+		<tycho.version>2.2.0</tycho.version>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -48,34 +47,28 @@
 				</executions>
 				<configuration>
 					<source>
-						<!-- source repositories to mirror from -->
 						<repository>
-							<url>http://www.certiv.net/updates</url>
+							<url>http://certiv.net/updates</url>
 							<layout>p2</layout>
-							<!-- "p2-metadata", "p2-artifacts", and "p2" (for both; default) -->
 						</repository>
 					</source>
-					<!-- starting from here all configuration parameters are optional -->
-					<!-- they are only shown here with default values for documentation purpose -->
 					<!-- The destination directory to mirror to. -->
 					<destination>${project.build.directory}/../repository</destination>
-					<!-- Whether only strict dependencies should be followed. -->
-					<!-- "strict" means perfect version match -->
+					<!-- Follow non-strict dependencies. -->
 					<followStrictOnly>false</followStrictOnly>
-					<!-- Whether or not to follow optional requirements. -->
+					<!-- Follow optional requirements. -->
 					<includeOptional>true</includeOptional>
-					<!-- Whether or not to follow non-greedy requirements. -->
+					<!-- Follow non-greedy requirements. -->
 					<includeNonGreedy>true</includeNonGreedy>
-					<!-- Whether to filter the resulting set of IUs to only -->
-					<!-- include the latest version of each IU -->
+					<!-- Include all versions. -->
 					<latestVersionOnly>false</latestVersionOnly>
-					<!-- don't mirror artifacts, only metadata -->
+					<!-- Mirror artifacts as well as metadata. -->
 					<mirrorMetadataOnly>false</mirrorMetadataOnly>
-					<!-- whether to compress the content.xml/artifacts.xml -->
-					<compress>true</compress>
-					<!-- whether to append to the target repository content -->
+					<!-- Don't compress the content.xml/artifacts.xml -->
+					<compress>false</compress>
+					<!-- Append to the target repository content -->
 					<append>true</append>
-					<!-- whether to mirror pack200 artifacts also. Available since tycho-extras 0.17.0 -->
+					<!-- Mirror pack200 artifacts. -->
 					<includePacked>true</includePacked>
 				</configuration>
 			</plugin>
